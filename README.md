@@ -64,6 +64,11 @@ AppleAuthenticationAndroid.configure({
   // ResponseType.CODE = 'code';
   // ResponseType.ID_TOKEN = 'id_token';
   responseType: ResponseType.ALL,
+
+  // [OPTIONAL]
+  // A String value used to associate a client session with an ID token. This value is also used to mitigate replay attacks.
+  // this is requried if you intend to use Firebase to sign in with this credential. Supply the response.id_token and rawNonce to Firebase OAuthProvider
+  nonce: "SHA-256 of rawNonce, where rawNonce is a unique non-repeating string"
 });
 
 // Sign In with Apple
@@ -99,6 +104,7 @@ const signInWithApple = async () => {
 };
 ```
 
+
 ## Credits
 
-This library is based on https://github.com/willowtreeapps/sign-in-with-apple-button-android. As such, it shares its dependencies and some setup instructions.
+This library is based on https://github.com/willowtreeapps/sign-in-with-apple-button-android and https://github.com/axxag/react-native-apple-authentication-android. As such, it shares its dependencies and some setup instructions.
