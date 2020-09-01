@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule {
 
@@ -33,7 +34,8 @@ public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule
 
     private final ReactApplicationContext reactContext;
 
-    private @Nullable SignInWithAppleConfiguration configuration;
+    private @Nullable
+    SignInWithAppleConfiguration configuration;
 
     public AppleAuthenticationAndroidModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -49,13 +51,13 @@ public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule
     public Map<String, Object> getConstants() {
         final Map<String, Object> ResponseType = new HashMap<>();
         ResponseType.put("ALL", SignInWithAppleConfiguration.ResponseType.ALL.toString());
-        ResponseType.put("CODE",  SignInWithAppleConfiguration.ResponseType.CODE.toString());
-        ResponseType.put("ID_TOKEN",  SignInWithAppleConfiguration.ResponseType.ID_TOKEN.toString());
+        ResponseType.put("CODE", SignInWithAppleConfiguration.ResponseType.CODE.toString());
+        ResponseType.put("ID_TOKEN", SignInWithAppleConfiguration.ResponseType.ID_TOKEN.toString());
 
         final Map<String, Object> Scope = new HashMap<>();
         Scope.put("ALL", SignInWithAppleConfiguration.Scope.ALL.toString());
-        Scope.put("EMAIL",  SignInWithAppleConfiguration.Scope.EMAIL.toString());
-        Scope.put("NAME",  SignInWithAppleConfiguration.Scope.NAME.toString());
+        Scope.put("EMAIL", SignInWithAppleConfiguration.Scope.EMAIL.toString());
+        Scope.put("NAME", SignInWithAppleConfiguration.Scope.NAME.toString());
 
         final Map<String, Object> constants = new HashMap<>();
         constants.put(E_NOT_CONFIGURED_ERROR, E_NOT_CONFIGURED_ERROR);
@@ -69,7 +71,8 @@ public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule
         return constants;
     }
 
-    private @Nullable FragmentManager getFragmentManagerHelper() {
+    private @Nullable
+    FragmentManager getFragmentManagerHelper() {
         Activity activity = getCurrentActivity();
         if (activity == null || !(activity instanceof FragmentActivity)) {
             return null;
@@ -84,35 +87,47 @@ public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule
         String redirectUri = "";
         SignInWithAppleConfiguration.Scope scope = SignInWithAppleConfiguration.Scope.ALL;
         SignInWithAppleConfiguration.ResponseType responseType = SignInWithAppleConfiguration.ResponseType.ALL;
+        String state = UUID.randomUUID().toString();
+        String nonce = "";
 
-        if (configObject.hasKey("clientId")) { 
+        if (configObject.hasKey("clientId")) {
             clientId = configObject.getString("clientId");
         }
 
-        if (configObject.hasKey("redirectUri")) { 
+        if (configObject.hasKey("redirectUri")) {
             redirectUri = configObject.getString("redirectUri");
         }
 
-        if (configObject.hasKey("scope")) { 
+        if (configObject.hasKey("scope")) {
             String scopeString = configObject.getString("scope");
             if (scopeString != null) {
                 scope = SignInWithAppleConfiguration.Scope.valueOf(scopeString);
             }
         }
 
-        if (configObject.hasKey("responseType")) { 
+        if (configObject.hasKey("responseType")) {
             String responseTypeString = configObject.getString("responseType");
             if (responseTypeString != null) {
                 responseType = SignInWithAppleConfiguration.ResponseType.valueOf(responseTypeString);
             }
         }
 
+        if (configObject.hasKey("state")) {
+            state = configObject.getString("state");
+        }
+
+        if (configObject.hasKey("nonce")) {
+            nonce = configObject.getString("nonce");
+        }
+
         this.configuration = new SignInWithAppleConfiguration.Builder()
-            .clientId(clientId)
-            .redirectUri(redirectUri)
-            .responseType(SignInWithAppleConfiguration.ResponseType.ALL)
-            .scope(SignInWithAppleConfiguration.Scope.ALL)
-            .build();
+                .clientId(clientId)
+                .redirectUri(redirectUri)
+                .responseType(SignInWithAppleConfiguration.ResponseType.ALL)
+                .scope(SignInWithAppleConfiguration.Scope.ALL)
+                .state(state)
+                .nonce(nonce)
+                .build();
     }
 
     @ReactMethod
@@ -122,7 +137,7 @@ public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule
             return;
         }
         FragmentManager fragmentManager = this.getFragmentManagerHelper();
-        
+
         if (fragmentManager == null) {
             promise.reject(E_NOT_CONFIGURED_ERROR);
             return;
@@ -176,10 +191,10 @@ public class AppleAuthenticationAndroidModule extends ReactContextBaseJavaModule
 
         String fragmentTag = "SignInWithAppleButton-$id-SignInWebViewDialogFragment";
         SignInWithAppleService service = new SignInWithAppleService(
-            fragmentManager,
-            fragmentTag,
-            configuration,
-            callback
+                fragmentManager,
+                fragmentTag,
+                configuration,
+                callback
         );
 
         service.show();

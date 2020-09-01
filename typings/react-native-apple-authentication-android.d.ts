@@ -36,6 +36,8 @@ declare module "react-native-apple-authentication-android" {
     redirectUri: string;
     responseType?: ResponseTypeEnum;
     scope?: ScopeEnum;
+    state?: string;
+    nonce?: string;
   }
 
   interface ISigninResponseUser {

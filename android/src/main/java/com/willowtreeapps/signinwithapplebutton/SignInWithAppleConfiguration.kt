@@ -5,7 +5,9 @@ data class SignInWithAppleConfiguration private constructor(
     val clientId: String,
     val redirectUri: String,
     val scope: String,
-    val responseType: String
+    val responseType: String,
+    val state: String,
+    val nonce: String
 ) {
 
     class Builder {
@@ -13,6 +15,8 @@ data class SignInWithAppleConfiguration private constructor(
         private lateinit var redirectUri: String
         private lateinit var scope: String
         private lateinit var responseType: String
+        private lateinit var state: String
+        private lateinit var nonce: String
 
         fun clientId(clientId: String) = apply {
             this.clientId = clientId
@@ -30,7 +34,15 @@ data class SignInWithAppleConfiguration private constructor(
             this.responseType = type.signal()
         }
 
-        fun build() = SignInWithAppleConfiguration(clientId, redirectUri, scope,responseType)
+        fun state(state: String) = apply {
+            this.state = state
+        }
+
+        fun nonce(nonce: String) = apply {
+            this.nonce = nonce
+        }
+
+        fun build() = SignInWithAppleConfiguration(clientId, redirectUri, scope, responseType, state, nonce)
     }
 
     enum class ResponseType {
