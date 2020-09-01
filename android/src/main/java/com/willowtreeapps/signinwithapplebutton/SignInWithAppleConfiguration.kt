@@ -1,6 +1,5 @@
 package com.willowtreeapps.signinwithapplebutton
 
-
 data class SignInWithAppleConfiguration private constructor(
     val clientId: String,
     val redirectUri: String,

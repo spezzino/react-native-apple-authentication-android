@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import com.reactlibrary.R
 import com.willowtreeapps.signinwithapplebutton.*
 
 class SignInWithAppleButton @JvmOverloads constructor(

@@ -17,7 +17,6 @@ import com.facebook.react.bridge.WritableMap;
 
 import com.willowtreeapps.signinwithapplebutton.SignInWithAppleCallback;
 import com.willowtreeapps.signinwithapplebutton.SignInWithAppleConfiguration;
-import com.willowtreeapps.signinwithapplebutton.SignInWithAppleResult;
 import com.willowtreeapps.signinwithapplebutton.SignInWithAppleService;
 
 import org.json.JSONObject;

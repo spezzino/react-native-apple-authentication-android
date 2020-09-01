@@ -5,7 +5,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.willowtreeapps.signinwithapplebutton.view.SignInWebViewDialogFragment
-import java.util.*
 
 class SignInWithAppleService(
         private val fragmentManager: FragmentManager,
@@ -29,9 +28,11 @@ class SignInWithAppleService(
 
   internal data class AuthenticationAttempt(
           val authenticationUri: String,
-          val redirectUri: String
+          val redirectUri: String,
+          val state: String
   ) : Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readString() ?: "invalid",
             parcel.readString() ?: "invalid",
             parcel.readString() ?: "invalid"
     )
@@ -39,6 +40,7 @@ class SignInWithAppleService(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
       parcel.writeString(authenticationUri)
       parcel.writeString(redirectUri)
+      parcel.writeString(state)
     }
 
     override fun describeContents(): Int {
@@ -81,7 +83,7 @@ class SignInWithAppleService(
                 .build()
                 .toString()
 
-        return AuthenticationAttempt(authenticationUri, configuration.redirectUri)
+        return AuthenticationAttempt(authenticationUri, configuration.redirectUri, configuration.state)
       }
     }
   }

@@ -1,6 +1,5 @@
 package com.willowtreeapps.signinwithapplebutton
 
-import android.util.Log
 import android.webkit.JavascriptInterface
 
 /**
